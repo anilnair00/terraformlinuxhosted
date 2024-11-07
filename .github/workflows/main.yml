@@ -20,22 +20,29 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install unzip
-      run: sudo apt-get install -y unzip
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
+    - uses: azure/login@v1
       with:
-        node-version: '14'
+       creds: ${{ secrets.AZURE_CREDENTIALS }}
+       
+    - name: Stop Azure Function App
+      run: az functionapp stop --name testfnc --resource-group testfnc_group 
+      
+    # - name: Install unzip
+    #   run: sudo apt-get install -y unzip
+
+    # - name: Setup Node.js
+    #   uses: actions/setup-node@v2
+    #   with:
+    #     node-version: '14'
         
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
+    # - name: Setup Terraform
+    #   uses: hashicorp/setup-terraform@v1
 
-    - name: Terraform Init
-      run: terraform init
+    # - name: Terraform Init
+    #   run: terraform init
 
-    - name: Terraform Plan
-      run: terraform plan -out=tfplan
+    # - name: Terraform Plan
+    #   run: terraform plan -out=tfplan
 
     # - name: Terraform Apply
     #   if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
